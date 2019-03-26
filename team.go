@@ -14,8 +14,8 @@ type Config struct {
 	Name string
 	// Number of workers for the Team.
 	Workers int
-	// WorkerQueueSize is the queue size allowed for each worker.
-	WorkerQueueSize int
+	// QueueSize is the queue size allowed for each worker.
+	QueueSize int
 	// MaxTime in seconds allowed for any Task submits or Result requests.
 	MaxTimeSecs int
 	// CloseOnTimeout closes any open Result channels open on Requests if the operation times out.
@@ -25,11 +25,11 @@ type Config struct {
 // NewConfig returns a new Config with defaults.
 func NewConfig() *Config {
 	return &Config{
-		Name:            "Default",
-		Workers:         10,
-		WorkerQueueSize: 20,
-		MaxTimeSecs:     1,
-		CloseOnTimeout:  true,
+		Name:           "Default",
+		Workers:        10,
+		QueueSize:      20,
+		MaxTimeSecs:    1,
+		CloseOnTimeout: true,
 	}
 }
 
@@ -114,7 +114,7 @@ func (t *Team) Submit(request TaskRequest) bool {
 func (t *Team) Start() {
 	t.configureLogger()
 	for i := 0; i < len(t.workers); i++ {
-		t.workers[i] = make(chan TaskRequest, t.Config.WorkerQueueSize)
+		t.workers[i] = make(chan TaskRequest, t.Config.QueueSize)
 		t.sync.mainSync.Add(1)
 		t.sync.workerSync.Add(1)
 		t.Logger.Debug("Starting Worker", LogWith("Team", t.Name), LogWith("WorkerID", i))
