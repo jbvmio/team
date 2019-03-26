@@ -1,4 +1,4 @@
-package work
+package team
 
 import (
 	"math/rand"

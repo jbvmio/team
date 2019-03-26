@@ -1,4 +1,4 @@
-package work
+package team
 
 import (
 	"math/rand"
@@ -8,8 +8,8 @@ import (
 	"github.com/OneOfOne/xxhash"
 )
 
-// TeamConfig contains configuration values for a work Team.
-type TeamConfig struct {
+// Config contains configuration values for a work Team.
+type Config struct {
 	// Optional Name for the Team.
 	Name string
 	// Number of workers for the Team.
@@ -22,9 +22,9 @@ type TeamConfig struct {
 	CloseOnTimeout bool
 }
 
-// NewTeamConfig returns a new TeamConfig with defaults.
-func NewTeamConfig() *TeamConfig {
-	return &TeamConfig{
+// NewConfig returns a new Config with defaults.
+func NewConfig() *Config {
+	return &Config{
 		Name:            "Default",
 		Workers:         10,
 		WorkerQueueSize: 20,
@@ -36,7 +36,7 @@ func NewTeamConfig() *TeamConfig {
 // Team is the coordinating members performing work.
 type Team struct {
 	Name           string
-	Config         *TeamConfig
+	Config         *Config
 	Logger         Logger
 	RequestChannel chan TaskRequest
 	workers        []chan TaskRequest
@@ -51,9 +51,9 @@ type syncGroup struct {
 }
 
 // NewTeam creates a new team with the number of workers specified.
-func NewTeam(config *TeamConfig) *Team {
+func NewTeam(config *Config) *Team {
 	if config == nil {
-		config = NewTeamConfig()
+		config = NewConfig()
 	}
 	return &Team{
 		Name:           config.Name,
